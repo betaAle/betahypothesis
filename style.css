@@ -6,46 +6,132 @@ body {
   line-height: 1.6;
 }
 
-header {
+.site-header {
   background: #111827;
   color: white;
   padding: 24px 8%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+149 lines · 2 KB
+
+style.css file contents
+  1
+  2
+  3
+  4
+  5
+  6
+  7
+  8
+  9
+ 10
+ 11
+ 12
+ 13
+ 14
+ 15
+ 16
+ 17
+ 18
+ 19
+ 20
+ 21
+ 22
+ 23
+ 24
+ 25
+ 26
+ 27
+ 28
+ 29
+ 30
+ 31
+ 32
+ 33
+ 34
+ 35
+ 36
+ 37
+ 38
+ 39
+ 40
+ 41
+ 42
+ 43
+
 }
 
-header a {
+.site-header a {
   color: white;
   text-decoration: none;
 }
 
-.logo {
+.brand {
   font-size: 1.6rem;
   font-weight: bold;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
-nav {
-  margin-top: 16px;
+.beta-mark {
+  font-size: 1.8rem;
 }
 
-nav a {
-  margin-right: 20px;
-  font-size: 1rem;
+.nav-toggle {
+  display: none;
+  background: #1e3a8a;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1.5rem;
+}
+
+.site-nav {
+  display: flex;
+  gap: 20px;
+}
+
+.site-nav a {
   color: #dbeafe;
+  text-decoration: none;
+  font-size: 1rem;
 }
 
-nav a:hover {
+.site-nav a:hover {
   text-decoration: underline;
 }
 
-main {
+.page {
   max-width: 900px;
   margin: 50px auto;
   padding: 0 24px;
+}
+
+.page-header {
+  margin-bottom: 40px;
+}
+
+.eyebrow {
+  font-size: 0.9rem;
+  color: #6b7280;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin: 0 0 10px 0;
 }
 
 h1 {
   font-size: 2.8rem;
   margin-bottom: 10px;
   color: #111827;
+}
+
+.lead {
+  font-size: 1.25rem;
+  color: #4b5563;
 }
 
 h2 {
@@ -61,15 +147,7 @@ a {
   color: #1d4ed8;
 }
 
-.hero {
-  padding: 50px 0;
-}
-
-.hero p {
-  font-size: 1.25rem;
-}
-
-.card {
+.contact-card {
   background: white;
   border: 1px solid #e5e7eb;
   border-radius: 14px;
@@ -78,7 +156,7 @@ a {
   box-shadow: 0 4px 14px rgba(0,0,0,0.05);
 }
 
-footer {
+.site-footer {
   margin-top: 60px;
   padding: 30px 8%;
   background: #111827;
@@ -86,27 +164,33 @@ footer {
   font-size: 0.95rem;
 }
 
-button,
-.menu-toggle {
-  background: #1e3a8a;
-  color: white;
-  border: none;
-  padding: 8px 12px;
-  border-radius: 8px;
-  cursor: pointer;
-}
-
 @media (max-width: 700px) {
-  nav a {
+  .site-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .nav-toggle {
     display: block;
-    margin: 10px 0;
+    align-self: flex-end;
+  }
+
+  .site-nav {
+    display: none;
+    flex-direction: column;
+    width: 100%;
+    margin-top: 16px;
+  }
+
+  .site-nav.active {
+    display: flex;
   }
 
   h1 {
     font-size: 2.2rem;
   }
 
-  main {
+  .page {
     margin: 30px auto;
   }
 }
