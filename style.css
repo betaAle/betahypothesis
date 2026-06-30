@@ -1,59 +1,64 @@
+:root {
+  --bg: #f7f7f4;
+  --surface: #ffffff;
+  --ink: #1f2933;
+  --muted: #5b6472;
+  --navy: #111827;
+  --blue: #1e3a8a;
+  --link: #1d4ed8;
+  --border: #e5e7eb;
+  --shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+}
+
+* {
+  box-sizing: border-box;
+}
+
 body {
   margin: 0;
   font-family: Georgia, "Times New Roman", serif;
-  background: #f7f7f4;
-  color: #1f2933;
-  line-height: 1.6;
+  background: var(--bg);
+  color: var(--ink);
+  line-height: 1.65;
 }
 
 .site-header {
-  background: #111827;
+  background: var(--navy);
   color: white;
-  padding: 24px 8%;
+  padding: 22px 8%;
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-.site-header a,
-.brand,
-.beta-mark {
+.site-header a {
   color: white;
   text-decoration: none;
 }
 
 .brand {
+  color: white;
   font-size: 1.65rem;
   font-weight: bold;
   display: flex;
   align-items: center;
   gap: 10px;
+  letter-spacing: 0.01em;
 }
 
 .beta-mark {
-  font-size: 2rem;
-  font-weight: bold;
-}
-
-.nav-toggle {
-  display: none;
-  background: #1e3a8a;
   color: white;
-  border: none;
-  padding: 8px 12px;
-  border-radius: 8px;
-  cursor: pointer;
-  font-size: 1.5rem;
+  font-size: 2rem;
+  line-height: 1;
 }
 
 .site-nav {
   display: flex;
-  gap: 20px;
+  gap: 22px;
 }
 
 .site-nav a {
   color: #dbeafe;
-  text-decoration: none;
   font-size: 1rem;
 }
 
@@ -62,69 +67,130 @@ body {
   text-decoration: underline;
 }
 
+.nav-toggle {
+  display: none;
+  background: var(--blue);
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1.4rem;
+}
+
 .page {
-  max-width: 900px;
-  margin: 50px auto;
+  max-width: 980px;
+  margin: 56px auto;
   padding: 0 24px;
 }
 
 .page-header {
-  margin-bottom: 40px;
+  margin-bottom: 46px;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 32px;
 }
 
 .eyebrow {
-  font-size: 0.9rem;
-  color: #6b7280;
+  font-size: 0.88rem;
+  color: var(--muted);
   text-transform: uppercase;
-  letter-spacing: 0.05em;
-  margin: 0 0 10px 0;
+  letter-spacing: 0.08em;
+  margin: 0 0 12px 0;
 }
 
 h1 {
-  font-size: 2.8rem;
-  margin-bottom: 10px;
-  color: #111827;
-}
-
-.lead {
-  font-size: 1.25rem;
-  color: #4b5563;
+  font-size: clamp(2.2rem, 5vw, 3.4rem);
+  line-height: 1.12;
+  margin: 0 0 18px 0;
+  color: var(--navy);
+  max-width: 850px;
 }
 
 h2 {
-  margin-top: 40px;
-  color: #1e3a8a;
+  margin-top: 44px;
+  color: var(--blue);
+  font-size: 1.65rem;
 }
 
 h3 {
-  color: #111827;
+  color: var(--navy);
+  margin-bottom: 6px;
 }
 
 p {
   font-size: 1.12rem;
 }
 
+.lead {
+  font-size: 1.28rem;
+  color: var(--muted);
+  max-width: 760px;
+}
+
 a {
-  color: #1d4ed8;
+  color: var(--link);
 }
 
 a:hover {
-  color: #1e40af;
+  color: var(--blue);
 }
 
 .contact-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 28px;
+  margin: 28px 0;
+  box-shadow: var(--shadow);
+}
+
+.contact-card h2:first-child,
+.contact-card h3:first-child {
+  margin-top: 0;
+}
+
+.button-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-top: 26px;
+}
+
+.button,
+.button-secondary {
+  display: inline-block;
+  padding: 11px 18px;
+  border-radius: 999px;
+  text-decoration: none;
+  font-size: 1rem;
+  font-weight: bold;
+}
+
+.button {
+  background: var(--blue);
+  color: white;
+}
+
+.button:hover {
+  background: var(--navy);
+  color: white;
+}
+
+.button-secondary {
+  border: 1px solid var(--border);
   background: white;
-  border: 1px solid #e5e7eb;
-  border-radius: 14px;
-  padding: 24px;
-  margin: 24px 0;
-  box-shadow: 0 4px 14px rgba(0,0,0,0.05);
+  color: var(--blue);
+}
+
+.button-secondary:hover {
+  border-color: var(--blue);
+  color: var(--navy);
 }
 
 .site-footer {
-  margin-top: 60px;
-  padding: 30px 8%;
-  background: #111827;
+  margin-top: 70px;
+  padding: 32px 8%;
+  background: var(--navy);
   color: #d1d5db;
   font-size: 0.95rem;
 }
@@ -134,7 +200,11 @@ a:hover {
   font-size: 0.95rem;
 }
 
-@media (max-width: 700px) {
+.site-footer a {
+  color: #dbeafe;
+}
+
+@media (max-width: 760px) {
   .site-header {
     flex-direction: column;
     align-items: flex-start;
@@ -151,17 +221,18 @@ a:hover {
     flex-direction: column;
     width: 100%;
     margin-top: 20px;
+    gap: 12px;
   }
 
   .site-nav.active {
     display: flex;
   }
 
-  h1 {
-    font-size: 2.2rem;
+  .page {
+    margin: 34px auto;
   }
 
-  .page {
-    margin: 30px auto;
+  .contact-card {
+    padding: 22px;
   }
 }
