@@ -15,21 +15,24 @@ body {
   align-items: center;
 }
 
-.site-header a {
+.site-header a,
+.brand,
+.beta-mark {
   color: white;
   text-decoration: none;
 }
 
 .brand {
-  font-size: 1.6rem;
+  font-size: 1.65rem;
   font-weight: bold;
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
 }
 
 .beta-mark {
-  font-size: 1.8rem;
+  font-size: 2rem;
+  font-weight: bold;
 }
 
 .nav-toggle {
@@ -55,6 +58,7 @@ body {
 }
 
 .site-nav a:hover {
+  color: white;
   text-decoration: underline;
 }
 
@@ -92,12 +96,20 @@ h2 {
   color: #1e3a8a;
 }
 
+h3 {
+  color: #111827;
+}
+
 p {
   font-size: 1.12rem;
 }
 
 a {
   color: #1d4ed8;
+}
+
+a:hover {
+  color: #1e40af;
 }
 
 .contact-card {
@@ -117,6 +129,11 @@ a {
   font-size: 0.95rem;
 }
 
+.site-footer p {
+  margin: 0;
+  font-size: 0.95rem;
+}
+
 @media (max-width: 700px) {
   .site-header {
     flex-direction: column;
@@ -126,13 +143,14 @@ a {
   .nav-toggle {
     display: block;
     align-self: flex-end;
+    margin-top: -38px;
   }
 
   .site-nav {
     display: none;
     flex-direction: column;
     width: 100%;
-    margin-top: 16px;
+    margin-top: 20px;
   }
 
   .site-nav.active {
