@@ -1,0 +1,26 @@
+/* Additional rules to ensure link colors and navbar colors are consistent across pages */
+
+/* Navbar on dark background */
+.site-header a,
+.site-header .site-nav a {
+  color: #ffffff;
+  text-decoration: none;
+}
+.site-header .site-nav a:hover,
+.site-header .site-nav a:focus {
+  text-decoration: underline;
+}
+
+/* Links in page content */
+a, a:visited {
+  color: #1d4ed8;
+}
+a:hover, a:focus {
+  color: #1e40af;
+  text-decoration: underline;
+}
+
+/* Links inside cards / light panels */
+.contact-card a {
+  color: #1d4ed8;
+}
