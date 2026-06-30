@@ -268,3 +268,7 @@ a:hover {
     margin-top: 30px;
   }
 }
+@media (max-width: 768px) {
+  .site-nav { display: none !important; flex-direction: column !important; }
+  .site-nav.open { display: flex !important; }
+}
