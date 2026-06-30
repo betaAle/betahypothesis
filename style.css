@@ -207,6 +207,18 @@ a:hover {
   color: #dbeafe;
 }
 
+.hero-logo {
+  margin-top: 38px;
+  max-width: 760px;
+}
+
+.hero-logo img {
+  width: 100%;
+  display: block;
+  border-radius: 18px;
+  box-shadow: var(--shadow);
+}
+
 @media (max-width: 760px) {
   .site-header {
     flex-direction: column;
