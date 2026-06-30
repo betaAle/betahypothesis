@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Beta Hypothesis | A Geometric Framework for Relativistic Dynamics</title>
+  <link rel="stylesheet" href="assets/style.css" />
+  <script>
+    window.MathJax = { tex: { inlineMath: [['\\(', '\\)'], ['$', '$']] }, svg: { fontCache: 'global' } };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+</head>
+<body>
+<header class="site-header">
+  <a class="brand" href="index.html"><span class="beta-mark">β</span><span>Beta Hypothesis</span></a>
+  <button class="nav-toggle" aria-label="Toggle navigation">☰</button>
+  <nav class="site-nav">
+    <a href="theory.html">Theory</a>
+    <a href="visualizations.html">Visualizations</a>
+    <a href="publications.html">Publications</a>
+    <a href="open-questions.html">Open Questions</a>
+    <a href="about.html">About</a>
+    <a href="contact.html">Contact</a>
+  </nav>
+</header>
+
+<main>
+  <section class="hero">
+    <div class="hero-copy">
+      <p class="eyebrow">Independent theoretical research</p>
+      <h1>Beta Hypothesis</h1>
+      <h2>A geometric framework for relativistic dynamics</h2>
+      <p class="lead">Can relativistic phenomena emerge from a local geometric constraint acting on an internal circular degree of freedom?</p>
+      <div class="formula-card">
+        <p>The central local constraint is</p>
+        <div class="formula">\[v_x^2 + v_\theta^2 = c^2\]</div>
+      </div>
+      <p>Beta Hypothesis is an ongoing speculative framework exploring whether time dilation, relativistic energy, and wave-particle relations can be interpreted as consequences of motion on a fiber bundle \(D^1 \times S^1\).</p>
+      <div class="actions">
+        <a class="button primary" href="theory.html">Explore the Theory</a>
+        <a class="button secondary" href="publications.html">Read the Publications</a>
+      </div>
+    </div>
+    <div class="hero-visual" aria-label="Stylized helix visualization">
+      <canvas id="helixCanvas" width="720" height="520"></canvas>
+    </div>
+  </section>
+
+  <section class="note">
+    <strong>Status:</strong> Beta Hypothesis is a research proposal under development. The website distinguishes derived relations, working assumptions, and open problems. It is not presented as an experimentally established replacement for standard relativity.
+  </section>
+
+  <section class="cards three">
+    <article class="card">
+      <h3>Geometry</h3>
+      <p>A particle is represented through observable motion in \(D^1\) and an internal cyclic degree of freedom \(S^1\), constrained by a fixed total phase velocity.</p>
+      <a href="theory.html#geometry">Learn more →</a>
+    </article>
+    <article class="card">
+      <h3>Dynamics</h3>
+      <p>The framework investigates how relativistic energy, internal clocks, and de Broglie-like wave relations may arise from the geometric constraint.</p>
+      <a href="theory.html#dynamics">Learn more →</a>
+    </article>
+    <article class="card">
+      <h3>Transparency</h3>
+      <p>Open questions and limitations are documented explicitly, including the status of coordinate transformations and possible empirical distinctions.</p>
+      <a href="open-questions.html">View open questions →</a>
+    </article>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <p>© <span id="year"></span> Beta Hypothesis. Independent research by Alessandro Venca.</p>
+</footer>
+<script src="assets/main.js"></script>
+</body>
+</html>
