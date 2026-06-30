@@ -1,30 +1,70 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Open Questions | Beta Hypothesis</title>
-  <link rel="stylesheet" href="style.css">
-  <link rel="stylesheet" href="style-fixes.css">
-  </head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Open Questions | Beta Hypothesis</title>
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="style-fixes.css">
+</head>
 <body>
 <header class="site-header"> <a class="brand" href="index.html"><span class="beta-mark">β</span><span>Beta Hypothesis</span></a><button class="nav-toggle" aria-label="Toggle navigation">☰</button><nav class="site-nav"><a href="theory.html">Theory</a><a href="visualizations.html">Visualizations</a><a href="publications.html">Publications</a><a href="open-questions.html">Open Questions</a><a href="about.html">About</a><a href="contact.html">Contact</a></nav></header>
-<main class="page">
-  <section class="page-header">
-    <p class="eyebrow">Discussion</p>
-    <h1>Open Questions</h1>
-    <p class="lead">A list of open questions and directions for further exploration.</p>
-  </section>
 
-  <section class="page-content">
-    <h2>Key unresolved points</h2>
-    <ul>
-      <li>Can all coordinate transform-based conserved transfers be derived internally without importing external transformations?</li>
-      <li>Can the framework reproduce high-precision spectral predictions without hidden assumptions?</li>
-      <li>How should interaction and quantum-like effects be incorporated into a locally constrained geometric setting?</li>
-    </ul>
-    <p>If you have thoughts or relevant references, please <a href="contact.html">get in touch</a>.</p>
-  </section>
+<main class="page">
+<section class="page-header">
+<p class="eyebrow">Discussion</p>
+<h1>Open Questions</h1>
+<p class="lead">The current framework (Beta 1) is a kinematical reformulation in (1+1) dimensions, not a complete dynamical theory. These are the principal directions in which it remains open — condensed from §6.7 of the manuscript.</p>
+</section>
+
+<section class="cards">
+
+<article class="card">
+<h3>Dynamical length contraction</h3>
+<p>Length contraction already follows from the derived Lorentz transformation at the coordinate-kinematic level. What is missing is a bundle-intrinsic, <em>dynamical</em> derivation: extending the construction from a single wave excitation to coherent ensembles of internal clocks bound by interaction terms not yet specified, and showing that the moving equilibrium configuration is the contracted one.</p>
+</article>
+
+<article class="card">
+<h3>Spinorial structure and fermionic statistics</h3>
+<p>The wavefunction ψ(x, θ, t) is a complex scalar. There is no spinor bundle, no spin-½ structure, and no fermionic statistics in the framework as it stands.</p>
+</article>
+
+<article class="card">
+<h3>Multi-particle architecture</h3>
+<p>The treatment covers a single-mode wave excitation on a single bundle. Whether multiple particles share one bundle or are described by tensor products of separate bundles is not yet fixed — a choice that entanglement and many-body coherence will require.</p>
+</article>
+
+<article class="card">
+<h3>Higher dimensions and accelerated observers</h3>
+<p>Extension to (3+1)-dimensional kinematics, non-collinear configurations, and accelerated observers requires generalizing the local constraint and the bundle structure. Curved or non-trivial spacetime backgrounds are similarly outside the present scope.</p>
+</article>
+
+<article class="card">
+<h3>Interactions, gauge fields, gravity</h3>
+<p>The construction is purely kinematical: it does not derive QED amplitudes or cross-sections, and includes no mechanism for gravitational attraction. The same interaction sector would also supply the binding forces underlying dynamical length contraction, above.</p>
+</article>
+
+<article class="card">
+<h3>Experimental discriminability</h3>
+<p>Within its (1+1)-dimensional domain, Beta reproduces the standard relativistic predictions that follow from γ — energy-momentum relation, time dilation, relativistic momentum, photon propagation, velocity composition. The distinction from the standard formulation is structural, not numerical. Discriminating signatures would have to come from genuinely new domains, such as the internal-mode spectrum of the fiber.</p>
+</article>
+
+<article class="card">
+<h3>No equivalence principle, no gravitational mechanism</h3>
+<p>Mass is discussed in geometric terms, but the model does not yet include an analogue of the equivalence principle, nor does it account for gravitational attraction. Whether inertial and gravitational mass coincide in all dynamical scenarios, and whether a gravity-like mechanism can be formulated from trajectory curvature or wave interference, remain open.</p>
+</article>
+
+<article class="card">
+<h3>The absent mass tower</h3>
+<p>The internal circular dimension supports multiple harmonic wave modes, each in principle a possible rest mass; the current paper restricts the construction to the fundamental mode. Why higher modes are absent, unstable, or inaccessible is not solved here — nature shows only isolated mass values, with no evidence of a regular harmonic sequence. This is one of the framework's main open problems.</p>
+</article>
+
+</section>
+
+<section class="page-header">
+<p class="lead">Each of these is a programmatic direction, not an established result. See <a href="publications.html">Publications</a> for the full manuscript, and <a href="contact.html">get in touch</a> with thoughts or relevant references.</p>
+</section>
+
 </main>
 <footer class="site-footer"><p>© <span id="year"></span> Beta Hypothesis. Independent research by Alessandro Venca.</p></footer>
 <script src="main.js"></script>
