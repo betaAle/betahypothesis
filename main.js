@@ -14,13 +14,13 @@ document.addEventListener('DOMContentLoaded', function () {
 document.addEventListener('DOMContentLoaded', function () {
   var dd = document.querySelector('.has-dropdown');
   if (dd) {
-    var toggle = dd.querySelector('.dropdown-toggle');
-    toggle.addEventListener('click', function (e) {
-      // on mobile / narrow screens, tap toggles the submenu instead of navigating
-      if (window.matchMedia('(max-width:768px)').matches) {
+    var arrow = dd.querySelector('.dropdown-arrow');
+    if (arrow) {
+      arrow.addEventListener('click', function (e) {
         e.preventDefault();
+        e.stopPropagation();
         dd.classList.toggle('open');
-      }
-    });
+      });
+    }
   }
 });
