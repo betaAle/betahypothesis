@@ -107,8 +107,8 @@ const axMat=new THREE.LineBasicMaterial({color:0x7f97bf});
 function axis(a,b){ scene.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints([a,b]),axMat)); }
 axis(P(-KXAX,0,0),P(KXAX,0,0)); axis(P(0,0,0),P(0,0,KTAX)); axis(P(0,0,0),P(0,WAX,0));
 scene.add(new THREE.ArrowHelper(new THREE.Vector3(1,0,0),P(KXAX,0,0),0.5,0x7f97bf,0.28,0.16));
-scene.add(new THREE.ArrowHelper(new THREE.Vector3(0,0,1),P(0,0,KTAX),0.5,0x7f97bf,0.28,0.16));
-scene.add(new THREE.ArrowHelper(new THREE.Vector3(0,1,0),P(0,WAX,0),0.5,0x7f97bf,0.28,0.16));
+scene.add(new THREE.ArrowHelper(new THREE.Vector3(0,1,0),P(0,0,KTAX),0.5,0x7f97bf,0.28,0.16));
+scene.add(new THREE.ArrowHelper(new THREE.Vector3(0,0,1),P(0,WAX,0),0.5,0x7f97bf,0.28,0.16));
 
 // ---- moving point + glow + guide lines + omega-slice ----
 const point=new THREE.Mesh(new THREE.SphereGeometry(0.12*S,20,20),new THREE.MeshBasicMaterial({color:0xffffff}));
