@@ -6,6 +6,27 @@
 <title>SR vs Beta: A Comparison | Beta Hypothesis</title>
 <link rel="stylesheet" href="style.css">
 <link rel="stylesheet" href="style-fixes.css">
+<style>
+.chains{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-top:6px;}
+@media(max-width:720px){.chains{grid-template-columns:1fr;}}
+.chain-title{font-size:1.05em;font-weight:700;margin:0 0 10px;}
+.chain{list-style:none;padding:0;margin:0;}
+.chain li{display:flex;gap:9px;align-items:baseline;padding:8px 0;border-bottom:1px solid rgba(128,128,128,0.18);}
+.chain li:last-child{border-bottom:0;}
+.step-n{opacity:0.45;font-variant-numeric:tabular-nums;min-width:1.5em;font-size:0.9em;}
+.tag{font-size:0.68em;text-transform:uppercase;letter-spacing:0.05em;padding:2px 8px;border-radius:20px;white-space:nowrap;font-family:Verdana,sans-serif;}
+.tag.post{background:rgba(255,215,122,0.16);color:#ffd77a;}
+.tag.der{background:rgba(111,179,240,0.18);color:#9fccff;}
+.tag.fut{background:rgba(150,160,180,0.14);color:#9fb0c8;}
+.chain .txt{flex:1;}
+.chain .txt em{color:#8fa6c8;font-style:normal;font-size:0.9em;display:block;margin-top:2px;}
+.landmark{color:#ffd77a;font-weight:600;}
+.chain-future li{opacity:0.6;}
+.reversal{margin-top:6px;}
+.reversal .rrow{display:flex;flex-wrap:wrap;gap:6px;align-items:baseline;padding:9px 0;border-bottom:1px solid rgba(128,128,128,0.18);}
+.reversal .rrow:last-child{border-bottom:0;}
+.reversal b{color:#ffd77a;}
+</style>
 </head>
 <body>
 <header class="site-header"> <a class="brand" href="index.html"><span class="beta-mark">β</span><span>Beta Hypothesis</span></a><button class="nav-toggle" aria-label="Toggle navigation">☰</button><nav class="site-nav"><a href="theory.html">Theory</a><a href="visualizations.html">Visualizations</a><a href="publications.html">Publications</a><a href="open-questions.html">Open Questions</a><a href="about.html">About</a><a href="contact.html">Contact</a></nav></header>
@@ -14,46 +35,73 @@
 <section class="page-header">
 <p class="eyebrow"><a href="theory.html">&larr; Back to Theory</a></p>
 <h1>SR vs Beta: Logical Sequencing</h1>
-<p class="lead">Special relativity builds outward from two physical postulates toward geometry. Beta inverts this: it starts from a single geometric postulate and derives both the kinematic structure and, in later work, the internal quantum numbers as consequences.</p>
+<p class="lead">Both theories arrive at the same physics — Lorentz transformations, the Minkowski metric, the mass shell. What differs is the <em>order</em> in which these appear, and what has to be assumed to get them. Special relativity postulates two physical axioms and derives the geometry. Beta postulates a single local geometric constraint and derives the rest — including, in later work, spin and charge.</p>
 </section>
 
 <section class="cards">
 <article class="card">
-<h3>Comparative table</h3>
-<table class="compare-table">
-<thead>
-<tr>
-<th>#</th>
-<th>SR (orthodox)</th>
-<th>Beta</th>
-</tr>
-</thead>
-<tbody>
-<tr><td>1</td><td>Postulate 1: principle of relativity</td><td>Postulate: substrate D&sup1;&times;S&sup1; (later extended to D&sup3;&times;S&sup3;)</td></tr>
-<tr><td>2</td><td>Postulate 2: invariance of c</td><td>Postulate: internal phase / winding on S&sup1; = rest mass</td></tr>
-<tr><td>3</td><td>Derived: Lorentz transformations (from 1+2)</td><td>Derived: dispersion cone (from phase-velocity relation)</td></tr>
-<tr><td>4</td><td>Derived: Minkowski metric (invariance of the quadratic form)</td><td>Derived: Gudermannian bridge (circular &harr; hyperbolic geometry)</td></tr>
-<tr><td>5</td><td>Derived: dispersion relation / mass-shell condition (final link)</td><td>Derived: velocity composition, SO(1,1)</td></tr>
-<tr><td>6</td><td>&mdash;</td><td>Derived: Lorentz transformations</td></tr>
-<tr class="compare-row-future"><td>7</td><td>&mdash;</td><td>Derived: Minkowski metric</td></tr>
-<tr class="compare-row-future"><td>8</td><td>&mdash;</td><td>Postulate: extension to S&sup3;&cong;SU(2) <em>(Beta 2)</em></td></tr>
-<tr class="compare-row-future"><td>9</td><td>&mdash;</td><td>Derived: covariance lemma (SU(2) action: postulate &rarr; consequence) <em>(Beta 2)</em></td></tr>
-<tr class="compare-row-future"><td>10</td><td>&mdash;</td><td>Derived: Peter-Weyl decomposition &rarr; SU(2)<sub>L</sub>/SU(2)<sub>R</sub> = spin/charge <em>(Beta 2)</em></td></tr>
-<tr class="compare-row-future"><td>11</td><td>&mdash;</td><td>Derived: photon as gauge boson of the Hopf U(1) <em>(Beta 3)</em></td></tr>
-</tbody>
-</table>
-<p class="table-note">Rows 7&ndash;11 (dimmed) belong to Beta 2 and Beta 3, not yet covered elsewhere on this site &mdash; included here to show where the program is headed.</p>
+<h3>The two chains</h3>
+<div class="chains">
+
+<div>
+<p class="chain-title">Special relativity</p>
+<ol class="chain">
+<li><span class="step-n">1</span><span class="tag post">Postulate</span><span class="txt">Principle of relativity</span></li>
+<li><span class="step-n">2</span><span class="tag post">Postulate</span><span class="txt">Invariance of the speed of light c</span></li>
+<li><span class="step-n">3</span><span class="tag der">Derived</span><span class="txt">Lorentz transformations</span></li>
+<li><span class="step-n">4</span><span class="tag der">Derived</span><span class="txt"><span class="landmark">Minkowski metric</span> — the invariant interval</span></li>
+<li><span class="step-n">5</span><span class="tag der">Derived</span><span class="txt"><span class="landmark">Dispersion / mass shell</span> E&sup2; = (pc)&sup2; + (mc&sup2;)&sup2;<em>the final link in the chain</em></span></li>
+<li><span class="step-n">&mdash;</span><span class="tag fut">Input</span><span class="txt">Rest mass — an external parameter, not derived</span></li>
+</ol>
+</div>
+
+<div>
+<p class="chain-title">Beta Hypothesis</p>
+<ol class="chain">
+<li><span class="step-n">1</span><span class="tag post">Postulate</span><span class="txt">Substrate: flat bundle M = D&sup1; &times; S&sup1;</span></li>
+<li><span class="step-n">2</span><span class="tag post">Postulate 1</span><span class="txt">Local propagation constraint &omega;&sup2; = c&sup2;(k<sub>x</sub>&sup2; + k<sub>&theta;</sub>&sup2;)<em>equivalently v<sub>x</sub>&sup2; + v<sub>&theta;</sub>&sup2; = c&sup2;</em></span></li>
+<li><span class="step-n">3</span><span class="tag post">Postulate 2</span><span class="txt">Internal quantization on S&sup1; (k<sub>&theta;</sub> = 2&pi;/&lambda;&#8320;)</span></li>
+<li><span class="step-n">4</span><span class="tag post">Postulate</span><span class="txt">Operational definition of energy (wavefront rate &times; &#8463;)</span></li>
+<li><span class="step-n">5</span><span class="tag der">Derived</span><span class="txt"><span class="landmark">Dispersion cone</span> — the first non-trivial geometric object</span></li>
+<li><span class="step-n">6</span><span class="tag der">Derived</span><span class="txt">Rest mass as internal frequency, m&#8320; = h/(c&lambda;&#8320;)</span></li>
+<li><span class="step-n">7</span><span class="tag der">Derived</span><span class="txt">Planck &amp; de Broglie relations</span></li>
+<li><span class="step-n">8</span><span class="tag der">Derived</span><span class="txt">Time dilation, relativistic momentum</span></li>
+<li><span class="step-n">9</span><span class="tag der">Derived</span><span class="txt">Local constancy of photon propagation</span></li>
+<li><span class="step-n">10</span><span class="tag der">Derived</span><span class="txt"><span class="landmark">Lorentz transformations</span> — selected as the consistency symmetry</span></li>
+<li><span class="step-n">11</span><span class="tag der">Derived</span><span class="txt"><span class="landmark">Minkowski metric</span> — geometry of multi-observer consistency</span></li>
+<li><span class="step-n">12</span><span class="tag der">Derived</span><span class="txt">SO(1,1) &amp; relativistic velocity composition</span></li>
+</ol>
+<ol class="chain chain-future" start="13">
+<li><span class="step-n">13</span><span class="tag fut">Beta 2</span><span class="txt">Extension of the fiber to S&sup3; &cong; SU(2)</span></li>
+<li><span class="step-n">14</span><span class="tag fut">Beta 2</span><span class="txt">Peter&ndash;Weyl decomposition &rarr; spin &amp; charge (SU(2)<sub>L</sub> / SU(2)<sub>R</sub>)</span></li>
+<li><span class="step-n">15</span><span class="tag fut">Beta 3</span><span class="txt">Photon as gauge boson of the Hopf U(1)</span></li>
+</ol>
+</div>
+
+</div>
+<p class="table-note">Steps 13&ndash;15 (dimmed) belong to Beta 2 and Beta 3, not yet covered elsewhere on this site — included to show where the program is headed.</p>
+</article>
+
+<article class="card">
+<h3>The reversal, at a glance</h3>
+<p>The same three landmarks appear in both chains, but their positions are inverted:</p>
+<div class="reversal">
+<div class="rrow"><b>Dispersion cone</b> — <span>first derived object in Beta (step 5), but the final derived link in SR (step 5, last).</span></div>
+<div class="rrow"><b>Lorentz transformations</b> — <span>near-primitive in SR (derived immediately from the two postulates), but a late consequence in Beta (step 10).</span></div>
+<div class="rrow"><b>Minkowski metric</b> — <span>the primitive arena in SR's usual reading; in Beta, the emergent geometry of consistency among observers (step 11).</span></div>
+<div class="rrow"><b>Rest mass</b> — <span>an external input in SR; in Beta, derived from the geometry of the internal fiber (step 6).</span></div>
+</div>
 </article>
 
 <article class="card">
 <h3>The conceptual hinge</h3>
-<p>SR postulates two physical axioms &mdash; relativity and the invariance of c &mdash; and derives all subsequent geometry from them. Beta postulates a single geometric axiom &mdash; substrate plus winding number &mdash; and derives from it both the kinematic structure (dispersion, Lorentz, Minkowski) and, in later work, the internal quantum numbers (spin, electric charge): one foundational act generating more structure, at the cost of a less immediately intuitive manifold (S&sup3; vs. flat space).</p>
-<p>The key reversal: in SR, the dispersion cone is the last link in the chain &mdash; a consequence of an already-postulated metric and transformation group. In Beta, the dispersion cone is the first non-trivial geometric object, and the Lorentz/Minkowski structure is what follows from it.</p>
+<p>SR postulates two physical axioms — relativity and the invariance of c — and reads the geometry off them. Beta postulates a single geometric object — a flat bundle with a local constraint — and derives both the kinematic structure (dispersion, Lorentz, Minkowski) and, in later work, the internal quantum numbers (spin, charge).</p>
+<p>One foundational act generates more structure, from fewer independent assumptions — at the cost of a less immediately intuitive substrate, and of a longer derivation chain. In SR the dispersion cone is where the reasoning ends; in Beta it is where it begins.</p>
 </article>
 </section>
 
 <section class="page-header">
-<p class="lead">Classification follows the Derived/Postulated/Open convention used across the Beta Hypothesis manuscripts. See <a href="theory.html">Theory</a> for the full Beta 1 narrative this table summarizes.</p>
+<p class="lead">Classification follows the Derived / Postulated / Open convention used across the Beta Hypothesis manuscripts. See <a href="theory.html">Theory</a> for the full Beta 1 narrative, and <a href="status.html">Is Beta just a reparametrization? &rarr;</a> for whether this structural difference actually buys anything.</p>
 </section>
 
 </main>
