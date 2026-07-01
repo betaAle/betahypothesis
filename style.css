@@ -313,7 +313,7 @@ a:hover {
 .dropdown-menu a:hover{background:rgba(111,179,240,0.14);}
 .has-dropdown:hover .dropdown-menu{display:block;}
 .has-dropdown.open .dropdown-menu{display:block;}
-.dropdown-toggle::after{content:" \25be";font-size:0.8em;opacity:0.7;}
+.dropdown-arrow{cursor:pointer;padding:0 6px;opacity:0.7;user-select:none;}
 
 @media(max-width:768px){
   .dropdown-menu{
