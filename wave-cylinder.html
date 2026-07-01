@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Wave on the Bundle | Beta Hypothesis</title>
+<style>
+  html,body{margin:0;background:#04081a;color:#dfe8f7;font-family:Verdana,Arial,sans-serif;}
+  #wrap{position:relative;width:100%;max-width:900px;margin:0 auto;}
+  #scene{display:block;width:100%;height:auto;touch-action:none;}
+  .lbl{position:absolute;pointer-events:none;font-family:Georgia,serif;font-style:italic;
+       font-size:15px;color:#bfe9ff;text-shadow:0 0 6px #04081a,0 0 6px #04081a;white-space:nowrap;transform:translate(-50%,-50%);}
+  #ui{max-width:900px;margin:10px auto 0;padding:0 14px 20px;}
+  .row{display:flex;flex-wrap:wrap;align-items:center;gap:14px;margin:10px 0;}
+  button{background:#12305a;color:#eaf2ff;border:1px solid #2f6fb0;border-radius:6px;
+         padding:8px 14px;font-size:14px;cursor:pointer;}
+  button:hover{background:#1c4a86;}
+  label{font-size:13px;}
+  input[type=range]{flex:1;min-width:160px;accent-color:#6fb3f0;}
+  .readouts{display:flex;flex-wrap:wrap;gap:18px;font-family:Georgia,serif;font-size:15px;color:#bfe9ff;}
+  .readouts b{color:#eaf6ff;}
+  .cap{font-size:12.5px;color:#8fa6c8;line-height:1.5;margin-top:8px;}
+  h1{font-size:20px;font-weight:bold;margin:0 0 4px;padding:16px 14px 0;max-width:900px;margin-left:auto;margin-right:auto;}
+  .sub{font-size:13px;color:#9fb4d6;padding:0 14px;max-width:900px;margin:0 auto 6px;}
+</style>
+</head>
+<body>
+<h1>A wave propagating on the D¹ × S¹ bundle</h1>
+<p class="sub">Rest observer watching a massive particle. The total speed along the helix is always c; only its partition between the observable base (vₓ) and the internal fiber (v_θ) changes.</p>
+
+<div id="wrap">
+  <canvas id="scene"></canvas>
+  <div class="lbl" id="lblX">x</div>
+  <div class="lbl" id="lblR">R = λ₀ / 2π</div>
+</div>
+
+<div id="ui">
+  <div class="row">
+    <button id="play">Pause</button>
+    <button id="reset">Reset</button>
+    <label><input type="checkbox" id="auto" checked> auto-ramp vₓ</label>
+    <label><input type="checkbox" id="vecs" checked> velocity triangle</label>
+  </div>
+  <div class="row">
+    <label>vₓ / c</label>
+    <input type="range" id="vx" min="0" max="0.99" step="0.001" value="0">
+  </div>
+  <div class="row readouts">
+    <span>vₓ/c = <b id="rvx">0.00</b></span>
+    <span>v_θ/c = <b id="rvt">1.00</b></span>
+    <span>γ = <b id="rg">1.00</b></span>
+    <span>α = <b id="ra">0°</b></span>
+  </div>
+  <p class="cap">At rest (vₓ = 0) the wave is pure internal rotation — the wavefronts are rings turning in place, and the internal clock ticks at its maximum rate. As vₓ increases, part of the motion is diverted along x: the helix stretches, and the internal rotation (hence the particle's own clock) slows as v_θ = c/γ. As vₓ → c the helix straightens toward the axis and the internal clock freezes. The bright point rides a single wavefront throughout.</p>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+const TWO_PI = Math.PI*2;
+const R = 1.1;           // cylinder radius (scene units)
+const H = 7.0;           // cylinder length (scene units)
+const LAMBDA_UNITS = 4;  // number of internal wavelengths (lambda_0) along the cylinder length
+
+const canvas = document.getElementById('scene');
+const wrap = document.getElementById('wrap');
+const renderer = new THREE.WebGLRenderer({canvas, antialias:true});
+renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0x04081a);
+
+const camera = new THREE.PerspectiveCamera(34, 16/9, 0.1, 100);
+camera.position.set(0, 1.7, 12.2);
+camera.lookAt(0,0,0);
+
+// ---- custom cylinder geometry (axis along X), uv.x = around, uv.y = along ----
+function buildCylinder(nTheta, nX){
+  const pos=[], uv=[], idx=[];
+  for(let j=0;j<=nX;j++){
+    const vpos=j/nX, X=(vpos-0.5)*H;
+    for(let i=0;i<=nTheta;i++){
+      const u=i/nTheta, phi=u*TWO_PI;
+      pos.push(X, R*Math.cos(phi), R*Math.sin(phi));
+      uv.push(u, vpos);
+    }
+  }
+  const row=nTheta+1;
+  for(let j=0;j<nX;j++){
+    for(let i=0;i<nTheta;i++){
+      const a=j*row+i, b=a+1, c=a+row, d=c+1;
+      idx.push(a,c,b, b,c,d);
+    }
+  }
+  const g=new THREE.BufferGeometry();
+  g.setAttribute('position', new THREE.Float32BufferAttribute(pos,3));
+  g.setAttribute('uv', new THREE.Float32BufferAttribute(uv,2));
+  g.setIndex(idx);
+  return g;
+}
+
+const mat = new THREE.ShaderMaterial({
+  side: THREE.DoubleSide,
+  uniforms:{ uAlpha:{value:0}, uTau:{value:0}, uLU:{value:LAMBDA_UNITS} },
+  vertexShader:`varying vec2 vUv; void main(){ vUv=uv;
+     gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0);}`,
+  fragmentShader:`
+    uniform float uAlpha, uTau, uLU; varying vec2 vUv;
+    void main(){
+      float phi = vUv.x*6.28318530718;
+      float Xn  = (vUv.y-0.5)*uLU;
+      float ta  = tan(uAlpha);
+      float g   = 1.0/cos(uAlpha);
+      float phase = 6.28318530718*(ta*Xn) + phi - 6.28318530718*g*uTau;
+      float w = 0.5+0.5*cos(phase);
+      vec3 lo = vec3(0.03,0.06,0.16);
+      vec3 hi = vec3(0.44,0.75,1.0);
+      gl_FragColor = vec4(mix(lo,hi,w),1.0);
+    }`
+});
+const cyl = new THREE.Mesh(buildCylinder(100,170), mat);
+scene.add(cyl);
+
+// ---- central x-axis with arrow ----
+const axisMat = new THREE.LineBasicMaterial({color:0x6f86b0});
+const axisGeo = new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(-H/2-0.6,0,0), new THREE.Vector3(H/2+0.9,0,0)]);
+scene.add(new THREE.Line(axisGeo, axisMat));
+const axisArrow = new THREE.ArrowHelper(new THREE.Vector3(1,0,0), new THREE.Vector3(H/2+0.6,0,0), 0.5, 0x6f86b0, 0.28, 0.16);
+scene.add(axisArrow);
+
+// ---- radius indicator (left end) ----
+const xL = -H/2 + 0.15;
+const radGeo = new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(xL,0,0), new THREE.Vector3(xL,R,0)]);
+scene.add(new THREE.Line(radGeo, new THREE.LineBasicMaterial({color:0xbfe9ff})));
+
+// ---- helix line ----
+const helixMat = new THREE.LineBasicMaterial({color:0xeaf6ff});
+const helix = new THREE.Line(new THREE.BufferGeometry(), helixMat);
+scene.add(helix);
+const HELIX_N = 700;
+
+// ---- representative phase point ----
+const point = new THREE.Mesh(new THREE.SphereGeometry(0.14,20,20), new THREE.MeshBasicMaterial({color:0xffffff}));
+scene.add(point);
+
+// ---- velocity triangle arrows ----
+const arrVx = new THREE.ArrowHelper(new THREE.Vector3(1,0,0), new THREE.Vector3(), 1, 0x4aa3ff, 0.22, 0.12);
+const arrVt = new THREE.ArrowHelper(new THREE.Vector3(0,1,0), new THREE.Vector3(), 1, 0x38e0d0, 0.22, 0.12);
+const arrC  = new THREE.ArrowHelper(new THREE.Vector3(1,0,0), new THREE.Vector3(), 1, 0xffffff, 0.24, 0.13);
+scene.add(arrVx, arrVt, arrC);
+
+// ---- state ----
+let tau=0, vxc=0, playing=true, autoRamp=true, showVecs=true, rampT=0;
+let pointVpos=0.5, pointPhi=0;
+const RAMP_SECS=18, TIME_RATE=0.32, ARROW_LEN=1.35;
+
+// ---- ui ----
+const el = id=>document.getElementById(id);
+el('play').onclick=()=>{playing=!playing; el('play').textContent=playing?'Pause':'Play';};
+el('reset').onclick=()=>{rampT=0; vxc=0; pointVpos=0.5; pointPhi=0; el('vx').value=0;};
+el('auto').onchange=e=>{autoRamp=e.target.checked;};
+el('vecs').onchange=e=>{showVecs=e.target.checked; arrVx.visible=arrVt.visible=arrC.visible=showVecs;};
+el('vx').oninput=e=>{autoRamp=false; el('auto').checked=false; vxc=parseFloat(e.target.value); rampT=vxc/0.99;};
+
+function pointPos(vpos, phi){
+  return new THREE.Vector3((vpos-0.5)*H, R*Math.cos(phi), R*Math.sin(phi));
+}
+
+function updateHelix(alpha){
+  const cot = Math.min(1/Math.tan(alpha), 40); // cap winding at rest for rendering
+  const pts=[];
+  for(let k=0;k<=HELIX_N;k++){
+    const s=k/HELIX_N, vpos=s;
+    const Xn=(vpos-0.5)*LAMBDA_UNITS;
+    const phi = TWO_PI*cot*Xn + pointPhi - TWO_PI*cot*((pointVpos-0.5)*LAMBDA_UNITS);
+    pts.push(pointPos(vpos, phi));
+  }
+  helix.geometry.dispose();
+  helix.geometry = new THREE.BufferGeometry().setFromPoints(pts);
+}
+
+// ---- html labels tracking 3d anchors ----
+function project(v){
+  const p=v.clone().project(camera);
+  return {x:(p.x*0.5+0.5)*wrap.clientWidth, y:(-p.y*0.5+0.5)*wrap.clientHeight};
+}
+function placeLabels(){
+  const sx=project(new THREE.Vector3(H/2+1.15,0,0));
+  el('lblX').style.left=sx.x+'px'; el('lblX').style.top=sx.y+'px';
+  const sr=project(new THREE.Vector3(xL,R*0.55,0.0));
+  el('lblR').style.left=(sr.x-38)+'px'; el('lblR').style.top=sr.y+'px';
+}
+
+let last=performance.now();
+function frame(now){
+  const dt=Math.min((now-last)/1000, 0.05); last=now;
+  if(playing){
+    tau += dt*TIME_RATE;
+    if(autoRamp){ rampT += dt/RAMP_SECS; if(rampT>1) rampT=0; vxc=0.99*rampT; el('vx').value=vxc; }
+  }
+  const alpha=Math.asin(Math.min(Math.max(vxc,0),0.999));
+  const g=1/Math.cos(alpha), vt=Math.cos(alpha), vx=Math.sin(alpha);
+  mat.uniforms.uAlpha.value=Math.min(alpha,1.45);
+  mat.uniforms.uTau.value=tau;
+
+  if(playing){
+    const dtau=dt*TIME_RATE;
+    pointVpos += (vx/LAMBDA_UNITS)*dtau;
+    pointPhi  += TWO_PI*vt*dtau;
+    if(pointVpos>1) pointVpos-=1; if(pointVpos<0) pointVpos+=1;
+  }
+  const P=pointPos(pointVpos, pointPhi);
+  point.position.copy(P);
+  updateHelix(alpha);
+
+  if(showVecs){
+    const xhat=new THREE.Vector3(1,0,0);
+    const that=new THREE.Vector3(0,-Math.sin(pointPhi),Math.cos(pointPhi));
+    arrVx.position.copy(P); arrVx.setDirection(xhat); arrVx.setLength(Math.max(vx,0.001)*ARROW_LEN,0.22,0.12);
+    arrVt.position.copy(P); arrVt.setDirection(that); arrVt.setLength(Math.max(vt,0.001)*ARROW_LEN,0.22,0.12);
+    const cdir=xhat.clone().multiplyScalar(vx).add(that.clone().multiplyScalar(vt)).normalize();
+    arrC.position.copy(P); arrC.setDirection(cdir); arrC.setLength(ARROW_LEN,0.24,0.13);
+  }
+
+  el('rvx').textContent=vx.toFixed(2);
+  el('rvt').textContent=vt.toFixed(2);
+  el('rg').textContent=g.toFixed(2);
+  el('ra').textContent=(alpha*180/Math.PI).toFixed(0)+'°';
+
+  placeLabels();
+  renderer.render(scene,camera);
+  requestAnimationFrame(frame);
+}
+
+function resize(){
+  const w=wrap.clientWidth, h=w*9/16;
+  renderer.setSize(w,h,false);
+  camera.aspect=w/h; camera.updateProjectionMatrix();
+}
+addEventListener('resize', resize);
+resize();
+requestAnimationFrame(frame);
+</script>
+</body>
+</html>
