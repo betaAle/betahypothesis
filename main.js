@@ -11,3 +11,16 @@ document.addEventListener('DOMContentLoaded', function () {
     year.textContent = new Date().getFullYear();
   }
 });
+document.addEventListener('DOMContentLoaded', function () {
+  var dd = document.querySelector('.has-dropdown');
+  if (dd) {
+    var toggle = dd.querySelector('.dropdown-toggle');
+    toggle.addEventListener('click', function (e) {
+      // on mobile / narrow screens, tap toggles the submenu instead of navigating
+      if (window.matchMedia('(max-width:768px)').matches) {
+        e.preventDefault();
+        dd.classList.toggle('open');
+      }
+    });
+  }
+});
