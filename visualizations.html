@@ -1,26 +1,44 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Visualizations | Beta Hypothesis</title>
-  <link rel="stylesheet" href="style.css">
-  <link rel="stylesheet" href="style-fixes.css">
-  </head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Visualizations | Beta Hypothesis</title>
+<link rel="stylesheet" href="style.css">
+<style>
+.viz-frame{width:100%;border:1px solid rgba(120,150,190,0.25);border-radius:10px;overflow:hidden;background:#04081a;margin-top:8px;}
+.viz-frame iframe{width:100%;height:760px;border:0;display:block;}
+@media(max-width:600px){.viz-frame iframe{height:640px;}}
+</style>
+</head>
 <body>
 <header class="site-header"> <a class="brand" href="index.html"><span class="beta-mark">β</span><span>Beta Hypothesis</span></a><button class="nav-toggle" aria-label="Toggle navigation">☰</button><nav class="site-nav"><a href="theory.html">Theory</a><a href="visualizations.html">Visualizations</a><a href="publications.html">Publications</a><a href="open-questions.html">Open Questions</a><a href="about.html">About</a><a href="contact.html">Contact</a></nav></header>
-<main class="page">
-  <section class="page-header">
-    <p class="eyebrow">Visualizations</p>
-    <h1>Visualizations</h1>
-    <p class="lead">Interactive and static visualizations that illustrate key ideas.</p>
-  </section>
 
-  <section class="page-content">
-    <h2>Explorer</h2>
-    <p>Explore interactive helix visualizations and phase-space illustrations.</p>
-    <p>Try the interactive explorer on this page or in the <a href="visualizations.html">visualizations section</a>.</p>
-  </section>
+<main class="page">
+<section class="page-header">
+<p class="eyebrow">Interactive</p>
+<h1>Visualizations</h1>
+<p class="lead">Seeing the geometry directly. The one wave, the one constraint, and how relativistic kinematics falls out of watching only part of the motion.</p>
+</section>
+
+<section class="cards">
+<article class="card">
+<h3>A wave propagating on the D¹ × S¹ bundle</h3>
+<p>A rest observer watching a massive particle. The wave always travels at speed c along its helical path on the cylinder — what changes is how that fixed speed is split between the observable base (vₓ) and the internal fiber (v_θ), subject to vₓ² + v_θ² = c².</p>
+<p>At rest, the wave is pure internal rotation: the wavefronts are rings turning in place, and the internal clock runs at its maximum rate. As vₓ increases, part of the motion is diverted along x — the helix stretches, and the internal rotation (the particle's own clock) slows as v_θ = c/γ. As vₓ → c the helix straightens toward the axis and the clock freezes. The bright point rides a single wavefront the whole time; the velocity triangle at the point shows the constraint in action.</p>
+
+<div class="viz-frame">
+<iframe src="wave-cylinder.html" title="Wave propagating on the D1 x S1 bundle" loading="lazy"></iframe>
+</div>
+
+<p style="font-size:0.9em;opacity:0.75;margin-top:10px;">Use the slider to set vₓ/c by hand, or let it ramp automatically. This is the animated form of Figure 1 in the manuscript. For the geometry behind it, see <a href="theory.html">Theory</a>.</p>
+</article>
+</section>
+
+<section class="page-header">
+<p class="lead">More visualizations — the dispersion cone, the GEOM energy circle, the circle-to-hyperbola bridge — are in preparation.</p>
+</section>
+
 </main>
 <footer class="site-footer"><p>© <span id="year"></span> Beta Hypothesis. Independent research by Alessandro Venca.</p></footer>
 <script src="main.js"></script>
