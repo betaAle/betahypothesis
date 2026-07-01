@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The GEOM Circle | Beta Hypothesis</title>
+<style>
+  html,body{margin:0;background:#04081a;color:#dfe8f7;font-family:Verdana,Arial,sans-serif;}
+  #wrap{width:100%;max-width:900px;margin:0 auto;}
+  #scene{display:block;width:100%;height:auto;background:#04081a;touch-action:none;}
+  #ui{max-width:900px;margin:8px auto 0;padding:0 14px 20px;}
+  .row{display:flex;flex-wrap:wrap;align-items:center;gap:14px;margin:10px 0;}
+  button{background:#12305a;color:#eaf2ff;border:1px solid #2f6fb0;border-radius:6px;padding:8px 14px;font-size:14px;cursor:pointer;}
+  button:hover{background:#1c4a86;}
+  button.mode{border-color:#ffd77a;color:#ffe6b0;}
+  label{font-size:13px;}
+  input[type=range]{flex:1;min-width:160px;accent-color:#6fb3f0;}
+  .readouts{display:flex;flex-wrap:wrap;gap:18px;font-family:Georgia,serif;font-size:15px;color:#bfe9ff;}
+  .readouts b{color:#eaf6ff;}
+  .cap{font-size:12.5px;color:#8fa6c8;line-height:1.5;margin-top:8px;}
+  h1{font-size:20px;font-weight:bold;margin:0 0 4px;padding:16px 14px 0;max-width:900px;margin-left:auto;margin-right:auto;}
+  .sub{font-size:13px;color:#9fb4d6;padding:0 14px;max-width:900px;margin:0 auto 6px;}
+</style>
+</head>
+<body>
+<h1>The GEOM circle: one construction, two readings</h1>
+<p class="sub">The ontological vector has fixed length on the circle; the observed quantity is the same ray extended to the tangent line, amplified by γ = sec α. The same picture describes velocity &amp; wavevectors, or energy.</p>
+
+<div id="wrap"><canvas id="scene"></canvas></div>
+
+<div id="ui">
+  <div class="row">
+    <button id="play">Pause</button>
+    <button id="reset">Reset</button>
+    <label><input type="checkbox" id="auto" checked> auto-ramp vₓ</label>
+    <button id="mode" class="mode">Show as velocity &amp; wavevectors</button>
+  </div>
+  <div class="row">
+    <label>vₓ / c</label>
+    <input type="range" id="vx" min="0" max="0.9" step="0.001" value="0">
+  </div>
+  <div class="row readouts">
+    <span>vₓ/c = sin α = <b id="rvx">0.00</b></span>
+    <span>γ = sec α = <b id="rg">1.00</b></span>
+    <span>α = <b id="ra">0°</b></span>
+  </div>
+  <p class="cap" id="cap"></p>
+</div>
+
+<script>
+const canvas=document.getElementById('scene'), ctx=canvas.getContext('2d'), wrap=document.getElementById('wrap');
+const DW=900, DH=560, ox=250, oy=380, R=150;
+const el=id=>document.getElementById(id);
+
+const MODES={
+  energy:{
+    shortVec:'E_GEOM = m₀c²', extVec:'E = γm₀c²',
+    hxShort:'Eₓ GEOM', vyShort:'E_θ GEOM', hxExt:'Eₓ', top:'E_θ = m₀c²',
+    cap:'Energy reading: the short vector is the ontological energy E_GEOM = m₀c², invariant, its length fixed on the circle — only the angular split between internal (E_θ) and translational (Eₓ) components changes. The observed energy E = γm₀c² is the same ray extended to the tangent line. At rest the two coincide at the top; as vₓ → c the observed energy runs off to infinity.'
+  },
+  kinematic:{
+    shortVec:'c', extVec:'ω',
+    hxShort:'vₓ', vyShort:'v_θ', hxExt:'kₓ', top:'k_θ',
+    cap:'Velocity & wavevector reading: the short vector is the velocity, of fixed length c on the circle, split into observable (vₓ) and internal (v_θ) parts with vₓ² + v_θ² = c². The same ray, extended to the fixed internal wavenumber k_θ, gives the wavevector: horizontal component kₓ and hypotenuse ω = c·|k|. One angle α, two overlaid meanings.'
+  }
+};
+let mode='energy';
+
+let vxc=0, playing=true, autoRamp=true, rampT=0;
+const RAMP=14;
+el('play').onclick=()=>{playing=!playing; el('play').textContent=playing?'Pause':'Play';};
+el('reset').onclick=()=>{rampT=0;vxc=0;el('vx').value=0;};
+el('auto').onchange=e=>autoRamp=e.target.checked;
+el('vx').oninput=e=>{autoRamp=false;el('auto').checked=false;vxc=parseFloat(e.target.value);rampT=vxc/0.9;};
+el('mode').onclick=()=>{ if(mode==='energy'){mode='kinematic';el('mode').textContent='Show as energy (Eₓ, E_θ)';}
+  else{mode='energy';el('mode').textContent='Show as velocity & wavevectors';} el('cap').textContent=MODES[mode].cap; };
+el('cap').textContent=MODES.energy.cap;
+
+function cx(mx){return ox+mx;} function cy(my){return oy-my;}
+function arrow(x1,y1,x2,y2,col,w){ ctx.strokeStyle=col;ctx.fillStyle=col;ctx.lineWidth=w;
+  ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x2,y2);ctx.stroke();
+  const a=Math.atan2(y2-y1,x2-x1),h=9;
+  ctx.beginPath();ctx.moveTo(x2,y2);ctx.lineTo(x2-h*Math.cos(a-0.4),y2-h*Math.sin(a-0.4));
+  ctx.lineTo(x2-h*Math.cos(a+0.4),y2-h*Math.sin(a+0.4));ctx.closePath();ctx.fill(); }
+function dashed(x1,y1,x2,y2,col,w){ ctx.save();ctx.setLineDash([4,4]);ctx.strokeStyle=col;ctx.lineWidth=w||1;
+  ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x2,y2);ctx.stroke();ctx.restore(); }
+function text(t,x,y,col,size,align){ ctx.fillStyle=col||'#bfe9ff';ctx.font='italic '+(size||15)+'px Georgia,serif';
+  ctx.textAlign=align||'left';ctx.textBaseline='middle';ctx.fillText(t,x,y); }
+
+function draw(){
+  ctx.clearRect(0,0,DW,DH);
+  const M=MODES[mode];
+  const a=Math.asin(Math.min(Math.max(vxc,0),0.999));
+  const g=1/Math.cos(a);
+  const tipx=cx(R*Math.sin(a)), tipy=cy(R*Math.cos(a));
+  const extX=cx(R*Math.tan(a)), extY=cy(R);
+
+  // tangent line at top of circle
+  dashed(cx(-R-70),cy(R),Math.min(extX+120,DW-20),cy(R),'#3a76b8',1.2);
+  // circle
+  ctx.save();ctx.setLineDash([7,6]);ctx.strokeStyle='#3a76b8';ctx.lineWidth=1.8;
+  ctx.beginPath();ctx.arc(ox,oy,R,0,Math.PI*2);ctx.stroke();ctx.restore();
+  // axes
+  arrow(cx(-R-70),oy,DW-30,oy,'#7f97bf',1.4); text('x',DW-24,oy+2,'#9fb4d6',16);
+  arrow(ox,cy(-R-40),ox,cy(R+120),'#7f97bf',1.4); text('θ',ox+10,cy(R+118),'#9fb4d6',16);
+
+  // projections of extended vector
+  dashed(extX,extY,extX,oy,'#6f9fd0',1);
+  // extended (secant) vector
+  arrow(ox,oy,extX,extY,'#6fb3f0',2.4);
+  // projections of short vector
+  dashed(tipx,tipy,tipx,oy,'#6f9fd0',1);
+  dashed(tipx,tipy,ox,tipy,'#6f9fd0',1);
+  // short (ontological) vector
+  arrow(ox,oy,tipx,tipy,'#eaf6ff',3);
+
+  // points
+  ctx.fillStyle='#ffffff';ctx.beginPath();ctx.arc(tipx,tipy,5,0,Math.PI*2);ctx.fill();
+  ctx.fillStyle='#6fb3f0';ctx.beginPath();ctx.arc(extX,extY,4.5,0,Math.PI*2);ctx.fill();
+
+  // angle arc
+  ctx.strokeStyle='#ffd77a';ctx.lineWidth=1.5;ctx.beginPath();
+  ctx.arc(ox,oy,38,-Math.PI/2,-Math.PI/2+a,false);ctx.stroke();
+  text('α',ox+20*Math.sin(a/2), oy-20*Math.cos(a/2)-2,'#ffd77a',14,'center');
+
+  // labels
+  text(M.shortVec, (ox+tipx)/2 - 6, (oy+tipy)/2 + 16, '#eaf6ff', 15, 'right');
+  text(M.extVec, (ox+extX)/2 + 10, (oy+extY)/2 - 10, '#9fccff', 15, 'left');
+  text(M.hxShort, tipx, oy+16, '#bfe9ff', 13.5, 'center');
+  text(M.vyShort, ox-12, tipy, '#bfe9ff', 13.5, 'right');
+  text(M.hxExt, extX, oy+16, '#9fccff', 13.5, 'center');
+  text(M.top, ox-12, cy(R)-2, '#bfe9ff', 13.5, 'right');
+
+  el('rvx').textContent=Math.sin(a).toFixed(2);
+  el('rg').textContent=g.toFixed(2);
+  el('ra').textContent=(a*180/Math.PI).toFixed(0)+'°';
+}
+
+let last=performance.now();
+function frame(now){
+  const dt=Math.min((now-last)/1000,0.05);last=now;
+  if(playing&&autoRamp){ rampT+=dt/RAMP; if(rampT>1)rampT=0; vxc=0.9*rampT; el('vx').value=vxc; }
+  draw(); requestAnimationFrame(frame);
+}
+function resize(){ const cssW=wrap.clientWidth, scale=cssW/DW, dpr=Math.min(devicePixelRatio,2);
+  canvas.style.width=cssW+'px'; canvas.width=cssW*dpr; canvas.height=DH*scale*dpr;
+  ctx.setTransform(scale*dpr,0,0,scale*dpr,0,0); }
+addEventListener('resize',resize); resize(); requestAnimationFrame(frame);
+</script>
+</body>
+</html>
