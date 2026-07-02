@@ -26,7 +26,7 @@
 </head>
 <body>
 <h1>A wave propagating on the D¹ × S¹ bundle</h1>
-<p class="sub">Rest observer watching a massive particle. The total speed along the helix is always c; only its partition between the observable base (vₓ) and the internal fiber (v_θ) changes.</p>
+<p class="sub">Rest observer watching a massive particle. The total speed along the helix is always c; only its partition between the observable base (vₓ) and the internal fiber (v₀) changes.</p>
 
 <div id="wrap">
   <canvas id="scene" width=900 height=600></canvas>
@@ -47,11 +47,11 @@
   </div>
   <div class="row readouts">
     <span>vₓ/c = <b id="rvx">0.00</b></span>
-    <span>v_θ/c = <b id="rvt">1.00</b></span>
+    <span>v₀/c = <b id="rvt">1.00</b></span>
     <span>γ = <b id="rg">1.00</b></span>
     <span>α = <b id="ra">0°</b></span>
   </div>
-  <p class="cap">At rest (vₓ = 0) the wave is pure internal rotation — the wavefronts are rings turning in place, and the internal clock ticks at its maximum rate. As vₓ increases, part of the motion is diverted along x: the helix stretches, and the internal rotation (hence the particle's own clock) slows as v_θ = c/γ. As vₓ → c the helix straightens toward the axis and the internal clock freezes. The bright point rides a single wavefront throughout.The complex wavefield Ψ(x,θ,t)=exp[i(kxx+kθθ+ωt)]  is mapped to the surface in two-tone blue through Re[ψ].</p>
+  <p class="cap">At rest (vₓ = 0) the wave is pure internal rotation — the wavefronts are rings turning in place, and the internal clock ticks at its maximum rate. As vₓ increases, part of the motion is diverted along x: the helix stretches, and the internal rotation (hence the particle's own clock) slows as v₀ = c/γ. As vₓ → c the helix straightens toward the axis and the internal clock freezes. The bright point rides a single wavefront throughout.The complex wavefield Ψ(x,θ,t)=exp[i(kxx+kθθ+ωt)] is mapped to the surface in two-tone blue through Re[ψ].</p>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
