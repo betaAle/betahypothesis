@@ -67,7 +67,7 @@ const MODES={
 let mode='energy';
 
 let vxc=0, playing=true, autoRamp=true, rampT=0;
-const RAMP=30;
+const RAMP=15;
 el('play').onclick=()=>{playing=!playing; el('play').textContent=playing?'Pause':'Play';};
 el('reset').onclick=()=>{rampT=0;vxc=0;el('vx').value=0;};
 el('auto').onchange=e=>autoRamp=e.target.checked;
@@ -94,7 +94,7 @@ function draw(){
   const g=1/Math.cos(a);
   const tipx=cx(R*Math.sin(a)), tipy=cy(R*Math.cos(a));
   const extX=cx(R*Math.tan(a)), extY=cy(R);
-  const xRight=DW-10;
+  const xRight=DW-20;
 
   // tangent line at top of circle
   dashed(cx(-R-30),cy(R),xRight,cy(R),'#3a76b8',1.4);
