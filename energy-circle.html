@@ -67,7 +67,7 @@ const MODES={
 let mode='energy';
 
 let vxc=0, playing=true, autoRamp=true, rampT=0;
-const RAMP=14;
+const RAMP=28;
 el('play').onclick=()=>{playing=!playing; el('play').textContent=playing?'Pause':'Play';};
 el('reset').onclick=()=>{rampT=0;vxc=0;el('vx').value=0;};
 el('auto').onchange=e=>autoRamp=e.target.checked;
