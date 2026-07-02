@@ -7,7 +7,7 @@
 <style>
   html,body{margin:0;background:#04081a;color:#dfe8f7;font-family:Verdana,Arial,sans-serif;}
   #wrap{position:relative;width:100%;max-width:900px;margin:0 auto;}
-  #scene{display:block;width:100%;height:auto;touch-action:none;}
+  #scene{display:block;width:100%;height:120%;touch-action:none;}
   .lbl{position:absolute;pointer-events:none;font-family:Georgia,serif;font-style:italic;
        font-size:15px;color:#bfe9ff;text-shadow:0 0 6px #04081a,0 0 6px #04081a;white-space:nowrap;transform:translate(-50%,-50%);}
   #ui{max-width:900px;margin:10px auto 0;padding:0 14px 20px;}
@@ -29,7 +29,7 @@
 <p class="sub">Rest observer watching a massive particle. The total speed along the helix is always c; only its partition between the observable base (vₓ) and the internal fiber (v_θ) changes.</p>
 
 <div id="wrap">
-  <canvas id="scene"></canvas>
+  <canvas id="scene" width=900 height=600></canvas>
   <div class="lbl" id="lblX">x</div>
   <div class="lbl" id="lblR">R = λ₀ / 2π</div>
 </div>
