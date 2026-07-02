@@ -55,24 +55,24 @@ const el=id=>document.getElementById(id);
 const MODES={
   energy:{
     shortVec:'E<sub>GEOM</sub> = m₀c²', extVec:'E = γm₀c²',
-    hxShort:'Eₓ GEOM', vyShort:'E<sub>θ</sub> GEOM', hxExt:'Eₓ=pc', top:'E<sub>θ</sub> = m₀c²',
-    cap:'Energy reading: the short vector is the ontological energy E<sub>GEOM</sub> = m₀c², invariant, its length fixed on the circle — only the angular split between internal (E<sub>θ</sub>) and translational (Eₓ) components changes. The observed energy E = γm₀c² is the same ray extended to the tangent line. At rest the two coincide at the top; as vₓ → c the observed energy runs off to infinity.'
+    hxShort:'Eₓ GEOM', vyShort:'Eθ GEOM', hxExt:'Eₓ=pc', top:'Eθ = m₀c²',
+    cap:'Energy reading: the short vector is the ontological energy E<sub>GEOM</sub> = m₀c², invariant, its length fixed on the circle — only the angular split between internal (Eθ) and translational (Eₓ) components changes. The observed energy E = γm₀c² is the same ray extended to the tangent line. At rest the two coincide at the top; as vₓ → c the observed energy runs off to infinity.'
   },
   kinematic:{
     shortVec:'c', extVec:'ω',
-    hxShort:'vₓ', vyShort:'v<sub>θ</sub>', hxExt:'kₓ', top:'k<sub>θ</sub>',
-    cap:'Velocity & wavevector reading: the short vector is the velocity, of fixed length c on the circle, split into observable (vₓ) and internal (v<sub>θ</sub>) parts with vₓ² + v<sub>θ</sub>² = c². The same ray, extended to the fixed internal wavenumber k<sub>θ</sub>, gives the wavevector: horizontal component kₓ and hypotenuse ω = c·|k|. One angle α, two overlaid meanings.'
+    hxShort:'vₓ', vyShort:'vθ', hxExt:'kₓ', top:'kθ',
+    cap:'Velocity & wavevector reading: the short vector is the velocity, of fixed length c on the circle, split into observable (vₓ) and internal (vθ) parts with vₓ² + vθ² = c². The same ray, extended to the fixed internal wavenumber kθ, gives the wavevector: horizontal component kₓ and hypotenuse ω = c·|k|. One angle α, two overlaid meanings.'
   }
 };
 let mode='energy';
 
 let vxc=0, playing=true, autoRamp=true, rampT=0;
-const RAMP=28;
+const RAMP=30;
 el('play').onclick=()=>{playing=!playing; el('play').textContent=playing?'Pause':'Play';};
 el('reset').onclick=()=>{rampT=0;vxc=0;el('vx').value=0;};
 el('auto').onchange=e=>autoRamp=e.target.checked;
 el('vx').oninput=e=>{autoRamp=false;el('auto').checked=false;vxc=parseFloat(e.target.value);rampT=vxc/0.9;};
-el('mode').onclick=()=>{ if(mode==='energy'){mode='kinematic';el('mode').textContent='Show as energy (Eₓ, E<sub>θ</sub>)';}
+el('mode').onclick=()=>{ if(mode==='energy'){mode='kinematic';el('mode').textContent='Show as energy (Eₓ, Eθ)';}
   else{mode='energy';el('mode').textContent='Show as velocity & wavevectors';} el('cap').textContent=MODES[mode].cap; };
 el('cap').textContent=MODES.energy.cap;
 
@@ -94,7 +94,7 @@ function draw(){
   const g=1/Math.cos(a);
   const tipx=cx(R*Math.sin(a)), tipy=cy(R*Math.cos(a));
   const extX=cx(R*Math.tan(a)), extY=cy(R);
-  const xRight=DW-20;
+  const xRight=DW-10;
 
   // tangent line at top of circle
   dashed(cx(-R-30),cy(R),xRight,cy(R),'#3a76b8',1.4);
