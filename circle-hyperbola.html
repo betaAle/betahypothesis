@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Circle ↔ Hyperbola | Beta Hypothesis</title>
+<style>
+  html,body{margin:0;background:#04081a;color:#dfe8f7;font-family:Verdana,Arial,sans-serif;}
+  #wrap{width:100%;max-width:760px;margin:0 auto;}
+  #scene{display:block;width:100%;height:auto;background:#04081a;touch-action:none;}
+  #ui{max-width:760px;margin:8px auto 0;padding:0 14px 20px;}
+  .row{display:flex;flex-wrap:wrap;align-items:center;gap:14px;margin:10px 0;}
+  button{background:#12305a;color:#eaf2ff;border:1px solid #2f6fb0;border-radius:6px;padding:8px 14px;font-size:14px;cursor:pointer;}
+  button:hover{background:#1c4a86;}
+  label{font-size:13px;}
+  input[type=range]{flex:1;min-width:160px;accent-color:#6fb3f0;}
+  .readouts{display:flex;flex-wrap:wrap;gap:16px;font-family:Georgia,serif;font-size:15px;color:#bfe9ff;}
+  .readouts b{color:#eaf6ff;}
+  .cap{font-size:12.5px;color:#8fa6c8;line-height:1.5;margin-top:8px;}
+  .legend{display:flex;flex-wrap:wrap;gap:16px;font-size:12.5px;color:#bfe9ff;margin:10px 0 4px;}
+  .legend .sw{display:inline-block;width:13px;height:13px;border-radius:3px;vertical-align:-1px;margin-right:5px;}
+  .gud{font-size:12.8px;color:#9fb4d6;line-height:1.55;background:rgba(120,150,190,0.08);
+       border:1px solid rgba(120,150,190,0.18);border-radius:8px;padding:11px 13px;margin-top:8px;}
+  .gud b{color:#eaf6ff;}
+  .gud .mono{font-family:Georgia,serif;font-style:italic;color:#ffd77a;}
+  h1{font-size:20px;font-weight:bold;margin:0 0 4px;padding:16px 14px 0;max-width:760px;margin-left:auto;margin-right:auto;}
+  .sub{font-size:13px;color:#9fb4d6;padding:0 14px;max-width:760px;margin:0 auto 6px;}
+</style>
+</head>
+<body>
+<h1>Circle ↔ hyperbola: the Gudermannian bridge</h1>
+<p class="sub">The bounded circle (β² + 1/γ² = 1) and the unbounded hyperbola (γ² − (βγ)² = 1) share the same vertex and the same angle. The circle stays finite; the hyperbola runs off — which is why rapidity, not angle, composes additively.</p>
+
+<div id="wrap"><canvas id="scene"></canvas></div>
+
+<div id="ui">
+  <div class="row">
+    <button id="play">Pause</button>
+    <button id="reset">Reset</button>
+    <label><input type="checkbox" id="auto" checked> auto-ramp vₓ</label>
+  </div>
+  <div class="row">
+    <label>vₓ / c</label>
+    <input type="range" id="vx" min="0" max="0.9" step="0.001" value="0">
+  </div>
+  <div class="row readouts">
+    <span>β = sin α = <b id="rb">0.00</b></span>
+    <span>γ = <b id="rg">1.00</b></span>
+    <span>φ = <b id="rp">0.00</b></span>
+    <span>α = <b id="ra">0°</b></span>
+  </div>
+  <div class="legend">
+    <span><i class="sw" style="background:rgba(255,215,122,0.5)"></i> circular sector Φ/2 — area = α (bounded)</span>
+    <span><i class="sw" style="background:rgba(111,179,240,0.55)"></i> hyperbolic sector Ψ/2 — area = φ (unbounded)</span>
+    <span><i class="sw" style="background:#cfe6ff"></i> compass arc — carries the long vector (length γ) onto the y-axis</span>
+  </div>
+  <div class="gud">
+    <b>The Gudermannian bridge.</b> The circular angle α and the hyperbolic rapidity φ measure the same physical velocity through two different geometries, linked by the Gudermannian function: α = gd φ, equivalently <span class="mono">sin α = tanh φ</span>, cos α = sech φ, sec α = cosh φ = γ. The circular angle saturates at 90° as vₓ → c, while the rapidity grows without bound — which is exactly why φ, not α, adds when velocities are composed. The circle keeps the invariant finite; the hyperbola carries the additive parameter.
+  </div>
+  <p class="cap">The point on the circle is (β, 1/γ); extend the same ray to the tangent line and rise to the hyperbola to reach (βγ, γ). As vₓ → c, the circle point stays on the unit circle while the hyperbola point escapes to infinity.</p>
+</div>
+
+<script>
+const canvas=document.getElementById('scene'), ctx=canvas.getContext('2d'), wrap=document.getElementById('wrap');
+const DW=640, DH=600, ox=215, oy=385, S=150;
+const el=id=>document.getElementById(id);
+
+let vxc=0, playing=true, autoRamp=true, rampT=0;
+const RAMP=15;
+el('play').onclick=()=>{playing=!playing;el('play').textContent=playing?'Pause':'Play';};
+el('reset').onclick=()=>{rampT=0;vxc=0;el('vx').value=0;};
+el('auto').onchange=e=>autoRamp=e.target.checked;
+el('vx').oninput=e=>{autoRamp=false;el('auto').checked=false;vxc=parseFloat(e.target.value);rampT=vxc/0.9;};
+
+function cx(mx){return ox+mx*S;} function cy(my){return oy-my*S;}
+function arrow(x1,y1,x2,y2,col,w){ ctx.strokeStyle=col;ctx.fillStyle=col;ctx.lineWidth=w;
+  ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x2,y2);ctx.stroke();
+  const a=Math.atan2(y2-y1,x2-x1),h=9;
+  ctx.beginPath();ctx.moveTo(x2,y2);ctx.lineTo(x2-h*Math.cos(a-0.4),y2-h*Math.sin(a-0.4));
+  ctx.lineTo(x2-h*Math.cos(a+0.4),y2-h*Math.sin(a+0.4));ctx.closePath();ctx.fill(); }
+function seg(x1,y1,x2,y2,col,w){ ctx.strokeStyle=col;ctx.lineWidth=w;ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x2,y2);ctx.stroke(); }
+function dseg(x1,y1,x2,y2,col,w){ ctx.save();ctx.setLineDash([5,5]);seg(x1,y1,x2,y2,col,w||1.2);ctx.restore(); }
+function text(t,x,y,col,size,align){ ctx.fillStyle=col||'#bfe9ff';ctx.font='italic '+(size||16)+'px Georgia,serif';
+  ctx.textAlign=align||'left';ctx.textBaseline='middle';ctx.fillText(t,x,y); }
+
+function draw(){
+  ctx.clearRect(0,0,DW,DH);
+  const a=Math.asin(Math.min(Math.max(vxc,0),0.999));
+  const b=Math.sin(a), g=1/Math.cos(a), bg=Math.tan(a), phi=Math.atanh(Math.min(b,0.999));
+  const xMaxU=2.4;
+
+  // --- Gudermann sectors / coloured angles (always shown) ---
+  // circular sector: from +y axis to ray O->A, area = alpha/2
+  ctx.fillStyle='rgba(255,215,122,0.22)';
+  ctx.beginPath();ctx.moveTo(cx(0),cy(0));
+  ctx.arc(cx(0),cy(0),S, -Math.PI/2, -Math.PI/2+a, false);ctx.closePath();ctx.fill();
+  // hyperbolic sector: O -> vertex(0,1) -> arc -> C, area = phi/2
+  ctx.fillStyle='rgba(111,179,240,0.24)';
+  ctx.beginPath();ctx.moveTo(cx(0),cy(0));
+  for(let t=0;t<=1.001;t+=0.05){ const xx=bg*t; ctx.lineTo(cx(xx),cy(Math.sqrt(1+xx*xx))); }
+  ctx.closePath();ctx.fill();
+
+  // --- tangent line y = 1 ---
+  dseg(cx(-1.3),cy(1),cx(xMaxU),cy(1),'#3a76b8',1.6);
+
+  // --- unit circle ---
+  ctx.strokeStyle='#6fb3f0';ctx.lineWidth=2.5;
+  ctx.beginPath();ctx.arc(cx(0),cy(0),S,0,Math.PI*2);ctx.stroke();
+
+  // --- hyperbola y = sqrt(1+x^2) ---
+  ctx.strokeStyle='#ffd77a';ctx.lineWidth=2.5;ctx.beginPath();
+  let first=true;
+  for(let xx=-xMaxU; xx<=xMaxU; xx+=0.03){ const yy=Math.sqrt(1+xx*xx);
+    if(first){ctx.moveTo(cx(xx),cy(yy));first=false;} else ctx.lineTo(cx(xx),cy(yy)); }
+  ctx.stroke();
+
+  // --- axes ---
+  arrow(cx(-1.35),cy(0),cx(xMaxU+0.05),cy(0),'#8fa6c8',1.6); text('x',cx(xMaxU+0.05)+4,cy(0)+2,'#9fb4d6',19);
+  arrow(cx(0),cy(-1.35),cx(0),cy(2.55),'#8fa6c8',1.6); text('y',cx(0)+8,cy(2.55),'#9fb4d6',19);
+
+  // points
+  const Ax=cx(b),Ay=cy(1/g), Bx=cx(bg),By=cy(1), Cx=cx(bg),Cy=cy(g);
+
+  // ray O->A (bright), extension A->B (dashed), vertical B->C (dashed gold)
+  seg(cx(0),cy(0),Ax,Ay,'#eaf6ff',3);
+  dseg(Ax,Ay,Bx,By,'#6fb3f0',2);
+  dseg(Bx,By,Cx,Cy,'#ffd77a',2);
+
+  // compass arc of radius gamma: carries the long vector (|OB| = gamma) onto the y-axis at height gamma
+  ctx.save();ctx.setLineDash([5,5]);ctx.strokeStyle='#cfe6ff';ctx.lineWidth=1.6;ctx.beginPath();
+  for(let i=0;i<=40;i++){ const th=(Math.PI/2 - a) + (a)*(i/40); const px=cx(g*Math.cos(th)), py=cy(g*Math.sin(th));
+    if(i===0)ctx.moveTo(px,py); else ctx.lineTo(px,py); }
+  ctx.stroke();ctx.restore();
+
+  // projections to axes
+  dseg(Ax,Ay,Ax,cy(0),'#6f9fd0',1.2);          // beta on x
+  dseg(Ax,Ay,cx(0),Ay,'#6f9fd0',1.2);          // 1/gamma on y
+  dseg(Cx,Cy,Cx,cy(0),'#6f9fd0',1.2);          // beta*gamma on x
+  dseg(Cx,Cy,cx(0),Cy,'#6f9fd0',1.2);          // gamma on y
+
+  // sector labels, centred on each sector's bisector (follow the animation)
+  const cb=0.5*Math.sin(a/2), cbY=0.5*Math.cos(a/2);
+  text('Φ/2', cx(cb), cy(cbY), '#ffd77a', 15, 'center');
+  const hmx=bg*0.5*0.9, hmy=(1+g)*0.5*0.92;
+  text('Ψ/2', cx(hmx), cy(hmy), '#bfe9ff', 15, 'center');
+
+  // point markers
+  ctx.fillStyle='#eaf6ff';ctx.beginPath();ctx.arc(Ax,Ay,5.5,0,Math.PI*2);ctx.fill();      // A on circle
+  ctx.fillStyle='#04081a';ctx.strokeStyle='#bfe9ff';ctx.lineWidth=2;
+  ctx.beginPath();ctx.arc(Bx,By,5,0,Math.PI*2);ctx.fill();ctx.stroke();                    // B on tangent (hollow)
+  ctx.fillStyle='#ffd77a';ctx.beginPath();ctx.arc(Cx,Cy,5.5,0,Math.PI*2);ctx.fill();      // C on hyperbola
+
+  // axis value labels (larger)
+  text('β', Ax, cy(0)+19, '#bfe9ff', 20, 'center');
+  text('βγ', Cx, cy(0)+19, '#ffd77a', 20, 'center');
+  text('1/γ', cx(0)-13, Ay, '#bfe9ff', 20, 'right');
+  text('γ', cx(0)-13, Cy, '#ffd77a', 20, 'right');
+
+  // curve equation labels
+  text('β² + 1/γ² = 1', cx(0.15), cy(-1.2), '#9fccff', 17, 'left');
+  text('γ² − (βγ)² = 1', cx(1.55), cy(1.95), '#ffd77a', 17, 'left');
+
+  // Gudermannian relation — large and centred at the top
+  ctx.textAlign='center';ctx.textBaseline='middle';
+  ctx.font='italic 27px Georgia,serif';
+  ctx.fillStyle='#ffd77a'; ctx.fillText('α', DW/2-44, 40);
+  ctx.fillStyle='#eaf6ff'; ctx.fillText('= gd φ', DW/2+18, 40);
+  ctx.font='italic 19px Georgia,serif';
+  ctx.fillStyle='#9fb4d6'; ctx.fillText('sin α = tanh φ', DW/2, 72);
+
+  el('rb').textContent=b.toFixed(2);
+  el('rg').textContent=g.toFixed(2);
+  el('rp').textContent=phi.toFixed(2);
+  el('ra').textContent=(a*180/Math.PI).toFixed(0)+'°';
+}
+
+let last=performance.now();
+function frame(now){
+  const dt=Math.min((now-last)/1000,0.05);last=now;
+  if(playing&&autoRamp){ rampT+=dt/RAMP; if(rampT>1)rampT=0; vxc=0.9*rampT; el('vx').value=vxc; }
+  draw(); requestAnimationFrame(frame);
+}
+function resize(){ const cssW=wrap.clientWidth, scale=cssW/DW, dpr=Math.min(devicePixelRatio,2);
+  canvas.style.width=cssW+'px'; canvas.width=cssW*dpr; canvas.height=DH*scale*dpr;
+  ctx.setTransform(scale*dpr,0,0,scale*dpr,0,0); }
+addEventListener('resize',resize); resize(); requestAnimationFrame(frame);
+</script>
+</body>
+</html>
